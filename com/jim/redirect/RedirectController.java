@@ -15,10 +15,32 @@ import java.io.IOException;
  * Date: 2018/11/20:下午9:21
  * Description:
  * <p>
- * 为什么要重定向?
+ * 一：为什么要重定向?
  * 1:防止二次提交(并不能完全阻止,比如在重定向之前进行刷新页面);
  * 2:一个工作流中,执行完一个步骤后转向另外一个控制器方法;
  * 3:在控制器中,当遇到异常后,跳转到错误页面,而不是正常完成后的显示页.
+ *
+ * spring的跳转可以通过以下3中方式实现:
+ * 1:RedirectView("redirectUrl")，这相当于HttpServletResponse.sendRedirect()
+ * 2:ModelAndView("redirect:/redirectUrl")
+ * 3:ModelAndView("forward:/redirectUrl")
+ *
+ * 二：跳转路径
+ * 跳转的地址是相对于当期的servlet上下文,也就是当前控制器的路径.比如:当前的路径是/api/v1.1/user/create
+ * 如果跳转地址写:/login(注册成功后自动登录)
+ * 那么这里的/login实际访问的地址是:/api/v1.1/user/login，
+ * 也可以写绝对地址。
+ *
+ * 三：跳转参数
+ * 1:RedirectView("redirectUrl")
+ * 使用RedirectAttributes,添加的参数会以get参数放在URL后面.
+ * 还有一种flash参数，会偷偷的传递到跳转的控制器，可以使用@ModelAttribute("flashName")接收参数值
+ *
+ * 2:ModelAndView("redirect:/url", ModelMap)
+ *
+ * 四：redirect和forwar的区别
+ * redirect返回302（永久性跳转），新地址会在header中，由客户端请求新地址，地址栏将会显示新地址；
+ * forward只发生在服务器端，客户端的URL地址不会发生变化；
  */
 
 @Controller
